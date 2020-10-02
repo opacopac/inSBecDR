@@ -26,14 +26,14 @@
 			<groupId>ch.voev.nova</groupId>
 			<artifactId>zps-serialization-kryo-starter</artifactId>
 			<version>${zps.serialization.kryo.version}</version>
-			<type>jar</type>
+			<systemPath>${project.basedir}/lib/zps-serialization-kryo-starter.jar</systemPath>
 		</dependency>
 
 		<dependency>
 			<groupId>ch.voev.nova.pflege.kontingent</groupId>
 			<artifactId>novap-kontingent-sb-interface</artifactId>
 			<version>${pflege.kontingent.sb.api.version}</version>
-			<type>jar</type>
+			<systemPath>${project.basedir}/lib/novap-kontingent-sb-interface.jar</systemPath>
 		</dependency>
 
 		<dependency>

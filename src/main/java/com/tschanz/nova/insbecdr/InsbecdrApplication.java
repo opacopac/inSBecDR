@@ -45,6 +45,7 @@ public class InsbecdrApplication implements CommandLineRunner {
 
 
     private void showWelcomeText() {
+        System.out.println("\n");
         System.out.println("Welcome to inSBecDR V1.0!");
         System.out.println("=========================");
     }
