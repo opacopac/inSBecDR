@@ -1,6 +1,9 @@
 package com.tschanz.nova.insbecdr;
 
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 
 public class InsbecdrConsole {
@@ -77,7 +80,18 @@ public class InsbecdrConsole {
 
 
     private void showPrompt() {
-        System.out.print("> ");
+        String promptText = List.of(
+            this.filter.getDatum() == null ? "" : "d=" + this.filter.getDatum().format(DateTimeFormatter.ISO_DATE),
+            this.filter.getVerwaltung() == null ? "" : "v=" + this.filter.getVerwaltung(),
+            this.filter.getFahrt() == -1 ? "" : "f=" + this.filter.getFahrt(),
+            this.filter.getUic1() == -1 ? "" : "a=" + this.filter.getUic1(),
+            this.filter.getUic2() == -1 ? "" : "b=" + this.filter.getUic2()
+        )
+            .stream()
+            .filter(x -> !x.isEmpty())
+            .collect(Collectors.joining(","))
+            + "> ";
+        System.out.print(promptText);
     }
 
 
