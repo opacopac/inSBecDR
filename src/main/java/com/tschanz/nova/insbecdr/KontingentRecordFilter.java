@@ -67,7 +67,7 @@ public class KontingentRecordFilter {
     }
 
 
-    public void reset() {
+    public void clearFilters() {
         this.datum = null;
         this.verwaltung = null;
         this.fahrt = -1;

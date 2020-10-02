@@ -1,5 +1,7 @@
 package com.tschanz.nova.insbecdr;
 
+import ch.voev.nova.pflege.kontingent.sb.api.TransportKontingentDatenrelease;
+
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
@@ -8,17 +10,19 @@ import java.util.stream.Collectors;
 
 public class InsbecdrConsole {
     private final int RECORD_PAGE_SIZE = 40;
-    private final KontingentIterator kontingentIterator;
+    private final TransportKontingentDatenrelease dr;
+    private KontingentIterator kontingentIterator;
     private final KontingentRecordFilter filter = new KontingentRecordFilter();
     private boolean hasPressedQuit = false;
 
 
-    public InsbecdrConsole(KontingentIterator kontingentIterator) {
-        if (kontingentIterator == null) {
-            throw new IllegalArgumentException("Parameter 'kontingentIterator' must not be empty!");
+    public InsbecdrConsole(TransportKontingentDatenrelease dr) {
+        if (dr == null) {
+            throw new IllegalArgumentException("Parameter 'dr' must not be empty!");
         }
 
-        this.kontingentIterator = kontingentIterator;
+        this.dr = dr;
+        this.initIterator();
     }
 
 
@@ -64,8 +68,11 @@ public class InsbecdrConsole {
             case "b":
                 this.filter.setUic2(command);
                 break;
+            case "c":
+                this.filter.clearFilters();
+                break;
             case "r":
-                this.filter.reset();
+                this.initIterator();
                 break;
             default:
                 this.showUnknownCommandText(command);
@@ -111,9 +118,15 @@ public class InsbecdrConsole {
             + " f <nr>   : set fahrt filter (e.g. 'f 123')\n"
             + " a <uic>  : set uic1 filter (e.g. 'a 8507000')\n"
             + " b <uic>  : set uic2 filter (e.g. 'b 8500218')\n"
-            + " r        : reset all filters\n"
+            + " c        : clear all filters\n"
+            + " r        : rewind iterator back to beginning\n"
             + " <enter>  : show next " + RECORD_PAGE_SIZE + " records"
         );
+    }
+
+
+    private void initIterator() {
+        this.kontingentIterator = new KontingentIterator(this.dr);
     }
 
 
@@ -129,7 +142,7 @@ public class InsbecdrConsole {
         }
 
         if (!kontingentIterator.hasNext()) {
-            System.out.println("(no more records)");
+            System.out.println("(no more records, press 'r' to rewind)");
         }
     }
 

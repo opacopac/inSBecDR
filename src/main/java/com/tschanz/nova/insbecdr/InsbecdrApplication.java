@@ -36,8 +36,7 @@ public class InsbecdrApplication implements CommandLineRunner {
         }
         this.showAnzahlFahrten(dr.getFahrten().size());
 
-        KontingentIterator kontingentIterator = new KontingentIterator(dr);
-        InsbecdrConsole console = new InsbecdrConsole(kontingentIterator);
+        InsbecdrConsole console = new InsbecdrConsole(dr);
         console.run();
 
         this.showByeByeText();
