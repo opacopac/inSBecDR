@@ -72,7 +72,7 @@ public class InsbecdrConsole {
 
 
     private void showWelcomeText() {
-        System.out.println("Welcome to inSBecDR! Press <enter> to show records & 'h' for help.");
+        System.out.println("Press <enter> to show records & 'h' for help.");
     }
 
 

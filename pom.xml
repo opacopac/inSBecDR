@@ -17,9 +17,25 @@
 	<properties>
 		<java.version>11</java.version>
 		<kotlin.version>1.4.10</kotlin.version>
+		<pflege.kontingent.sb.api.version>0.0.5</pflege.kontingent.sb.api.version>
+		<zps.serialization.kryo.version>0.0.3</zps.serialization.kryo.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>ch.voev.nova</groupId>
+			<artifactId>zps-serialization-kryo-starter</artifactId>
+			<version>${zps.serialization.kryo.version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.voev.nova.pflege.kontingent</groupId>
+			<artifactId>novap-kontingent-sb-interface</artifactId>
+			<version>${pflege.kontingent.sb.api.version}</version>
+			<type>jar</type>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
