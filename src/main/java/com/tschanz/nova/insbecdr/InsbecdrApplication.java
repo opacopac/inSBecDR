@@ -2,11 +2,14 @@ package com.tschanz.nova.insbecdr;
 
 import ch.voev.nova.pflege.kontingent.sb.api.TransportKontingentDatenrelease;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.FileNotFoundException;
+
+import static java.lang.System.exit;
 
 
 @SpringBootApplication
@@ -16,7 +19,9 @@ public class InsbecdrApplication implements CommandLineRunner {
 
 
     public static void main(String[] args) {
-         SpringApplication.run(InsbecdrApplication.class, args);
+        SpringApplication app = new SpringApplication(InsbecdrApplication.class);
+        app.setBannerMode(Banner.Mode.OFF);
+        app.run(args);
     }
 
 
@@ -40,6 +45,7 @@ public class InsbecdrApplication implements CommandLineRunner {
         console.run();
 
         this.showByeByeText();
+        exit(0);
     }
 
 
