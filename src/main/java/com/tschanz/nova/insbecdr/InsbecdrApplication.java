@@ -72,7 +72,9 @@ public class InsbecdrApplication implements CommandLineRunner {
         } else {
             try {
                 System.out.println("Reading DR file " + argument + "...");
-                return this.deserializer.deserialize(argument);
+                TransportKontingentDatenrelease dr = this.deserializer.deserialize(argument);
+                System.out.println("Done.");
+                return dr;
             } catch (FileNotFoundException exception) {
                 System.out.println("Error: SB DR File '" + argument + "' not found!");
                 return null;
