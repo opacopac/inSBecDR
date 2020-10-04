@@ -1,6 +1,7 @@
 package com.tschanz.nova.insbecdr;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 
 public class KontingentRecordFilter {
@@ -23,17 +24,17 @@ public class KontingentRecordFilter {
 
 
     public void setDatum(InsbecdrConsoleCommand command) {
-        if (command.getArgument() == null) {
-            this.showEmptyArgumentText(command);
+        try {
+            this.datum = LocalDate.parse(command.getArgument());
+        } catch (DateTimeParseException exception) {
+            this.showInvalidArgumentText(command);
         }
-
-        this.datum = LocalDate.parse(command.getArgument());
     }
 
 
     public void setVerwaltung(InsbecdrConsoleCommand command) {
-        if (command.getArgument() == null) {
-            this.showEmptyArgumentText(command);
+        if (command.getArgument() == null || command.getArgument().isEmpty()) {
+            this.showInvalidArgumentText(command);
         }
 
         this.verwaltung = command.getArgument();
@@ -41,29 +42,29 @@ public class KontingentRecordFilter {
 
 
     public void setFahrt(InsbecdrConsoleCommand command) {
-        if (command.getArgument() == null) {
-            this.showEmptyArgumentText(command);
+        try {
+            this.fahrt = Integer.parseInt(command.getArgument());
+        } catch (NumberFormatException exception) {
+            this.showInvalidArgumentText(command);
         }
-
-        this.fahrt = Integer.parseInt(command.getArgument());
     }
 
 
     public void setUic1(InsbecdrConsoleCommand command) {
-        if (command.getArgument() == null) {
-            this.showEmptyArgumentText(command);
+        try {
+            this.uic1 = Integer.parseInt(command.getArgument());
+        } catch (NumberFormatException exception) {
+            this.showInvalidArgumentText(command);
         }
-
-        this.uic1 = Integer.parseInt(command.getArgument());
     }
 
 
     public void setUic2(InsbecdrConsoleCommand command) {
-        if (command.getArgument() == null) {
-            this.showEmptyArgumentText(command);
+        try {
+            this.uic2 = Integer.parseInt(command.getArgument());
+        } catch (NumberFormatException exception) {
+            this.showInvalidArgumentText(command);
         }
-
-        this.uic2 = Integer.parseInt(command.getArgument());
     }
 
 
@@ -76,7 +77,7 @@ public class KontingentRecordFilter {
     }
 
 
-    private void showEmptyArgumentText(InsbecdrConsoleCommand command) {
-        System.out.println("Missing argument for command '" + command.getCommand() + "'. Press 'h' for help.");
+    private void showInvalidArgumentText(InsbecdrConsoleCommand command) {
+        System.out.println("Missing or invalid argument for command '" + command.getCommand() + "'. Press 'h' for help.");
     }
 }
