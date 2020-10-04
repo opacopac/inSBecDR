@@ -1,6 +1,8 @@
 package com.tschanz.nova.insbecdr;
 
 import ch.voev.nova.pflege.kontingent.sb.api.*;
+import ch.voev.nova.pflege.kontingent.sb.api.befahrungsVariante.BefahrungsVariante;
+import ch.voev.nova.pflege.kontingent.sb.api.befahrungsVariante.TransportAbschnitt;
 import ch.voev.nova.pflege.kontingent.sb.api.rabatte.KlasseTyp;
 import ch.voev.nova.pflege.kontingent.sb.api.rabatte.Rabatt;
 import ch.voev.nova.pflege.kontingent.sb.api.rabatte.Rabattstufe;
@@ -84,8 +86,8 @@ public class MockDr1 {
     public static TransportKontingent createTransportKontingent1() {
         return new TransportKontingent(
             "3",
-            Collections.emptyList(),
-            Ebene.ZAS,
+            List.of(createBefahrungsvariante1(), createBefahrungsvariante2()),
+            Ebene.TV,
             List.of(4004),
             List.of(createKontingentAngebot1(), createKontingentAngebot2())
         );
@@ -157,6 +159,44 @@ public class MockDr1 {
             List.of("1/2"),
             BigDecimal.valueOf(15),
             15
+        );
+    }
+
+
+    public static BefahrungsVariante createBefahrungsvariante1() {
+        return new BefahrungsVariante(
+            "13",
+            List.of(createTransportAbschnitt1(), createTransportAbschnitt2())
+        );
+    }
+
+
+    public static BefahrungsVariante createBefahrungsvariante2() {
+        return new BefahrungsVariante(
+            "15",
+            List.of(createTransportAbschnitt2(), createTransportAbschnitt1())
+        );
+    }
+
+
+    public static TransportAbschnitt createTransportAbschnitt1() {
+        return new TransportAbschnitt(
+            "14",
+            7,
+            8507000,
+            8500218,
+            "11"
+        );
+    }
+
+
+    public static TransportAbschnitt createTransportAbschnitt2() {
+        return new TransportAbschnitt(
+            "16",
+            7,
+            8500218,
+            8503000,
+            "11"
         );
     }
 }

@@ -27,7 +27,6 @@ class KontingentIteratorTests {
 		assertEquals(result.getFahrt(), MockDr1.createFahrt1());
 		assertEquals(result.getFahrtAbschnitt(), MockDr1.createFahrtAbschnitt1());
 		assertEquals(result.getTransportKontingent(), MockDr1.createTransportKontingent1());
-		assertEquals(result.getKontingentAngebot(), MockDr1.createKontingentAngebot1());
 	}
 
 
@@ -47,55 +46,46 @@ class KontingentIteratorTests {
 		assertEquals(result1.getFahrt(), MockDr1.createFahrt1());
 		assertEquals(result1.getFahrtAbschnitt(), MockDr1.createFahrtAbschnitt1());
 		assertEquals(result1.getTransportKontingent(), MockDr1.createTransportKontingent1());
-		assertEquals(result1.getKontingentAngebot(), MockDr1.createKontingentAngebot1());
 
 		// result2
 		assertEquals(result2.getFahrt(), MockDr1.createFahrt1());
 		assertEquals(result2.getFahrtAbschnitt(), MockDr1.createFahrtAbschnitt1());
 		assertEquals(result2.getTransportKontingent(), MockDr1.createTransportKontingent1());
-		assertEquals(result2.getKontingentAngebot(), MockDr1.createKontingentAngebot2());
 
 		// result3
 		assertEquals(result3.getFahrt(), MockDr1.createFahrt1());
 		assertEquals(result3.getFahrtAbschnitt(), MockDr1.createFahrtAbschnitt1());
 		assertEquals(result3.getTransportKontingent(), MockDr1.createTransportKontingent2());
-		assertEquals(result3.getKontingentAngebot(), MockDr1.createKontingentAngebot1());
 
 		// result4
 		assertEquals(result4.getFahrt(), MockDr1.createFahrt1());
 		assertEquals(result4.getFahrtAbschnitt(), MockDr1.createFahrtAbschnitt1());
 		assertEquals(result4.getTransportKontingent(), MockDr1.createTransportKontingent2());
-		assertEquals(result4.getKontingentAngebot(), MockDr1.createKontingentAngebot2());
 
 		// result5
 		assertEquals(result5.getFahrt(), MockDr1.createFahrt1());
 		assertEquals(result5.getFahrtAbschnitt(), MockDr1.createFahrtAbschnitt2());
 		assertEquals(result5.getTransportKontingent(), MockDr1.createTransportKontingent1());
-		assertEquals(result5.getKontingentAngebot(), MockDr1.createKontingentAngebot1());
 
 		// result6
 		assertEquals(result6.getFahrt(), MockDr1.createFahrt1());
 		assertEquals(result6.getFahrtAbschnitt(), MockDr1.createFahrtAbschnitt2());
 		assertEquals(result6.getTransportKontingent(), MockDr1.createTransportKontingent1());
-		assertEquals(result6.getKontingentAngebot(), MockDr1.createKontingentAngebot2());
 
 		// result7
 		assertEquals(result7.getFahrt(), MockDr1.createFahrt1());
 		assertEquals(result7.getFahrtAbschnitt(), MockDr1.createFahrtAbschnitt2());
 		assertEquals(result7.getTransportKontingent(), MockDr1.createTransportKontingent2());
-		assertEquals(result7.getKontingentAngebot(), MockDr1.createKontingentAngebot1());
 
 		// result8
 		assertEquals(result8.getFahrt(), MockDr1.createFahrt1());
 		assertEquals(result8.getFahrtAbschnitt(), MockDr1.createFahrtAbschnitt2());
 		assertEquals(result8.getTransportKontingent(), MockDr1.createTransportKontingent2());
-		assertEquals(result8.getKontingentAngebot(), MockDr1.createKontingentAngebot2());
 
 		// result9
 		assertEquals(result9.getFahrt(), MockDr1.createFahrt2());
 		assertEquals(result9.getFahrtAbschnitt(), MockDr1.createFahrtAbschnitt1());
 		assertEquals(result9.getTransportKontingent(), MockDr1.createTransportKontingent1());
-		assertEquals(result9.getKontingentAngebot(), MockDr1.createKontingentAngebot1());
 	}
 
 

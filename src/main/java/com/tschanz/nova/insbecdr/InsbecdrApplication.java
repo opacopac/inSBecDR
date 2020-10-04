@@ -1,5 +1,6 @@
 package com.tschanz.nova.insbecdr;
 
+import ch.voev.nova.pflege.kontingent.sb.api.Fahrt;
 import ch.voev.nova.pflege.kontingent.sb.api.TransportKontingentDatenrelease;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
@@ -7,7 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Collection;
 
 import static java.lang.System.exit;
 
@@ -15,7 +17,7 @@ import static java.lang.System.exit;
 @SpringBootApplication
 public class InsbecdrApplication implements CommandLineRunner {
     @Autowired
-    private SbDrDeserializer deserializer;
+    private SbDrLoader sbDrLoader;
 
 
     public static void main(String[] args) {
@@ -26,7 +28,7 @@ public class InsbecdrApplication implements CommandLineRunner {
 
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         this.showWelcomeText();
         if (args == null || args.length == 0) {
             this.showInvalidArgumentsText();
@@ -37,9 +39,9 @@ public class InsbecdrApplication implements CommandLineRunner {
         TransportKontingentDatenrelease dr = this.loadDr(args[0]);
         if (dr == null) {
             this.showByeByeText();
-            return;
+            exit(1);
         }
-        this.showAnzahlFahrten(dr.getFahrten().size());
+        this.showAnzahlFahrten(dr.getFahrten());
 
         InsbecdrConsole console = new InsbecdrConsole(dr);
         console.run();
@@ -57,12 +59,12 @@ public class InsbecdrApplication implements CommandLineRunner {
 
 
     private void showInvalidArgumentsText() {
-        System.out.println("Missing argument: please specify <file name> of SB DR or '-mock' to use mock data!");
+        System.out.println("Missing argument: please specify <file name> or <url> of a Sparbillett DR or '-mock' to use mock data!");
     }
 
 
-    private void showAnzahlFahrten(int anzFahrten) {
-        System.out.println("Anz Fahrten: " + anzFahrten);
+    private void showAnzahlFahrten(Collection<Fahrt> fahrten) {
+        System.out.println("Anz Fahrten: " + (fahrten != null ? fahrten.size() : 0));
     }
 
 
@@ -77,12 +79,12 @@ public class InsbecdrApplication implements CommandLineRunner {
             return MockDr1.createDr();
         } else {
             try {
-                System.out.println("Reading DR file " + argument + "...");
-                TransportKontingentDatenrelease dr = this.deserializer.deserialize(argument);
+                System.out.println("Reading DR " + argument + "...");
+                TransportKontingentDatenrelease dr = this.sbDrLoader.load(argument);
                 System.out.println("Done.");
                 return dr;
-            } catch (FileNotFoundException exception) {
-                System.out.println("Error: SB DR File '" + argument + "' not found!");
+            } catch (IOException exception) {
+                System.out.println("Error: reading DR '" + argument + "': " + exception.getMessage());
                 return null;
             }
         }

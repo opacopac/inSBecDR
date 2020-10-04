@@ -15,8 +15,7 @@ public class KontingentIterator implements Iterator<KontingentRecord> {
     private Fahrt currentFahrt;
     private FahrtAbschnitt currentFahrtAbschnitt;
     private TransportKontingent currentTransportKontingent;
-    private KontingentAngebot currentKontingentAngebot;
-    private int recordCount = 0;
+    private int recordCount = 1;
 
 
     public KontingentIterator(TransportKontingentDatenrelease dr) {
@@ -30,31 +29,19 @@ public class KontingentIterator implements Iterator<KontingentRecord> {
 
     public boolean hasNext() {
         return this.fahrtIterator.hasNext() || this.fahrtAbschnittIterator.hasNext()
-            || this.transportKontingentIterator.hasNext() || this.kontingentAngebotIterator.hasNext();
+            || this.transportKontingentIterator.hasNext();
     }
 
 
     public KontingentRecord next() {
-        this.nextKontingentAngebot();
+        this.nextTransportKontingent();
 
         return new KontingentRecord(
             this.recordCount++,
             this.currentFahrt,
             this.currentFahrtAbschnitt,
-            this.currentTransportKontingent,
-            this.currentKontingentAngebot
+            this.currentTransportKontingent
         );
-    }
-
-
-    private void nextKontingentAngebot() {
-        if (this.kontingentAngebotIterator == null || !this.kontingentAngebotIterator.hasNext()) {
-            this.nextTransportKontingent();
-        }
-
-        if (this.kontingentAngebotIterator != null) {
-            this.currentKontingentAngebot = this.kontingentAngebotIterator.next();
-        }
     }
 
 

@@ -27,7 +27,8 @@
 			<groupId>ch.voev.nova</groupId>
 			<artifactId>zps-serialization-kryo-starter</artifactId>
 			<version>${zps.serialization.kryo.version}</version>
-			<!--<systemPath>${project.basedir}/lib/zps-serialization-kryo-starter.jar</systemPath>-->
+			<!--<systemPath>${pom.basedir}/lib/zps-serialization-kryo-starter.jar</systemPath>
+			<scope>system</scope>-->
 		</dependency>
 
 		<dependency>

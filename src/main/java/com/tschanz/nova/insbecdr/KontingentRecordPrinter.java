@@ -4,20 +4,23 @@ import ch.voev.nova.pflege.kontingent.sb.api.Fahrt;
 import ch.voev.nova.pflege.kontingent.sb.api.FahrtAbschnitt;
 import ch.voev.nova.pflege.kontingent.sb.api.KontingentAngebot;
 import ch.voev.nova.pflege.kontingent.sb.api.TransportKontingent;
+import ch.voev.nova.pflege.kontingent.sb.api.befahrungsVariante.BefahrungsVariante;
+import ch.voev.nova.pflege.kontingent.sb.api.befahrungsVariante.TransportAbschnitt;
 import ch.voev.nova.pflege.kontingent.sb.api.rabatte.Rabatt;
 import ch.voev.nova.pflege.kontingent.sb.api.rabatte.Rabattstufe;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
 public class KontingentRecordPrinter {
-    public static String print(KontingentRecord record) {
+    public static String print(KontingentRecord record, boolean showBefahrungsvarianten) {
         return printRecordCount(record.getCount()) + " "
             + printFahrt(record.getFahrt()) + " "
             + printFahrtAbschnitt(record.getFahrtAbschnitt()) + " "
-            + printTransportKontingent(record.getTransportKontingent()) + " "
-            + printKontingentAngebot(record.getKontingentAngebot());
+            + printTransportKontingent(record.getTransportKontingent(), showBefahrungsvarianten);
     }
 
 
@@ -39,14 +42,29 @@ public class KontingentRecordPrinter {
     }
 
 
-    private static String printTransportKontingent(TransportKontingent kontingent) {
+    private static String printTransportKontingent(TransportKontingent kontingent, boolean showBefahrungsvarianten) {
         return "Produkte=" + kontingent.getProduktNummern() + " "
-            + "Ebene=" + kontingent.getEbene();
+            + "Ebene=" + kontingent.getEbene() + " "
+            + "Befahrungsvarianten=" + (kontingent.getBefahrungsvariante() == null ? 0 : kontingent.getBefahrungsvariante().size()) + "\n"
+            + (showBefahrungsvarianten ? printBefahrungsvarianteList(kontingent.getBefahrungsvariante()) : "")
+            + printKontingentAngebotList(kontingent.getAngebote());
+    }
+
+
+    private static String printKontingentAngebotList(List<KontingentAngebot> angebotList) {
+        if (angebotList == null || angebotList.size() == 0) {
+            return "[NO ANGEBOTE]";
+        }
+
+        return angebotList
+            .stream()
+            .map(KontingentRecordPrinter::printKontingentAngebot)
+            .collect(Collectors.joining("\n"));
     }
 
 
     private static String printKontingentAngebot(KontingentAngebot angebot) {
-        return "Anzahl=" + angebot.getAnzAngebote() + " "
+        return "  Anzahl=" + angebot.getAnzAngebote() + " "
             + printRabattstufe(angebot.getRabattstufe());
     }
 
@@ -56,14 +74,20 @@ public class KontingentRecordPrinter {
             return "[RABATTSTUFE MISSING]";
         }
 
-        String stufeText = (rabattstufe.getRabatte() != null) ?
-            rabattstufe.getRabatte()
-                .stream()
-                .map(KontingentRecordPrinter::printRabatt)
-                .collect(Collectors.joining(", "))
-            : "[RABATT MISSING]";
+        return "StufeId=" + rabattstufe.getIndex() + ": "
+            + printRabattList(rabattstufe.getRabatte());
+    }
 
-        return "StufeId=" + rabattstufe.getIndex() + ": " + stufeText;
+
+    private static String printRabattList(Collection<Rabatt> rabattList) {
+        if (rabattList == null || rabattList.size() == 0) {
+            return "[NO RABATTE]";
+        }
+
+        return rabattList
+            .stream()
+            .map(KontingentRecordPrinter::printRabatt)
+            .collect(Collectors.joining(", "));
     }
 
 
@@ -72,5 +96,43 @@ public class KontingentRecordPrinter {
             + rabatt.getKundensegmentCode() + " "
             + "Rabatt=" + rabatt.getRabattProzent() + "% "
             + "Verfall=" + rabatt.getVerfallTageVorReise();
+    }
+
+
+    private static String printBefahrungsvarianteList(Collection<BefahrungsVariante> befahrungsVarianteList) {
+        if (befahrungsVarianteList == null || befahrungsVarianteList.size() == 0) {
+            return "";
+        }
+
+        return befahrungsVarianteList
+            .stream()
+            .map(KontingentRecordPrinter::printBefahrungsvariante)
+            .collect(Collectors.joining("\n")) + "\n";
+    }
+
+
+    private static String printBefahrungsvariante(BefahrungsVariante befahrungsVariante) {
+        return "  Befahrungsvariante [Verwaltung, Fahrt, Uic1, Uic2]: "
+            + printTransportAbschnittList(befahrungsVariante.getAbschnitte());
+    }
+
+
+    private static String printTransportAbschnittList(List<TransportAbschnitt> transportAbschnittList) {
+        if (transportAbschnittList == null || transportAbschnittList.size() == 0) {
+            return "[NO TRANSPORTABSCHNITTE]";
+        }
+
+        return transportAbschnittList
+            .stream()
+            .map(KontingentRecordPrinter::printTransportAbschnitt)
+            .collect(Collectors.joining(", "));
+    }
+
+
+    private static String printTransportAbschnitt(TransportAbschnitt transportAbschnitt) {
+        return "[" + transportAbschnitt.getVerwaltungCode() + ", "
+            + transportAbschnitt.getFahrtNummer() + ", "
+            + transportAbschnitt.getHst1Uic() + ", "
+            + transportAbschnitt.getHst2Uic() + "]";
     }
 }

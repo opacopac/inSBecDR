@@ -9,11 +9,12 @@ import java.util.stream.Collectors;
 
 
 public class InsbecdrConsole {
-    private final int RECORD_PAGE_SIZE = 40;
+    private final int RECORD_PAGE_SIZE = 10;
     private final TransportKontingentDatenrelease dr;
     private KontingentIterator kontingentIterator;
     private final KontingentRecordFilter filter = new KontingentRecordFilter();
     private boolean hasPressedQuit = false;
+    private boolean showBefahrungsvarianten = false;
 
 
     public InsbecdrConsole(TransportKontingentDatenrelease dr) {
@@ -74,6 +75,9 @@ public class InsbecdrConsole {
             case "r":
                 this.initIterator();
                 break;
+            case "s":
+                this.showBefahrungsvarianten = !this.showBefahrungsvarianten;
+                break;
             default:
                 this.showUnknownCommandText(command);
                 break;
@@ -120,6 +124,7 @@ public class InsbecdrConsole {
             + " b <uic>  : set uic2 filter (e.g. 'b 8500218')\n"
             + " c        : clear all filters\n"
             + " r        : rewind iterator back to beginning\n"
+            + " s        : toggle show/hide befahrungsvarianten\n"
             + " <enter>  : show next " + RECORD_PAGE_SIZE + " records"
         );
     }
@@ -135,7 +140,7 @@ public class InsbecdrConsole {
         while (count < RECORD_PAGE_SIZE && kontingentIterator.hasNext()) {
             KontingentRecord record = kontingentIterator.next();
             if (this.passesFilter(record)) {
-                String recordText = KontingentRecordPrinter.print(record);
+                String recordText = KontingentRecordPrinter.print(record, this.showBefahrungsvarianten);
                 System.out.println(recordText);
                 count++;
             }
