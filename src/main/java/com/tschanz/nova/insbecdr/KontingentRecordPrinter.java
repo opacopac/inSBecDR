@@ -95,6 +95,7 @@ public final class KontingentRecordPrinter {
 
         return rabattList
             .stream()
+            .sorted(new RabattComparator())
             .map(KontingentRecordPrinter::printRabatt)
             .collect(Collectors.joining(", "));
     }

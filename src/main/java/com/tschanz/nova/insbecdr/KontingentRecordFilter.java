@@ -26,7 +26,7 @@ public class KontingentRecordFilter {
     public void setDatum(InsbecdrConsoleCommand command) {
         try {
             this.datum = LocalDate.parse(command.getArgument());
-        } catch (DateTimeParseException exception) {
+        } catch (DateTimeParseException | NullPointerException exception) {
             this.showInvalidArgumentText(command);
         }
     }
