@@ -2,6 +2,8 @@ package com.tschanz.nova.insbecdr;
 
 import ch.voev.nova.pflege.kontingent.sb.api.TransportKontingentDatenrelease;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
@@ -82,6 +84,9 @@ public class InsbecdrConsole {
             case "k":
                 this.showTransportkontingente = !this.showTransportkontingente;
                 break;
+            case "w":
+                this.writeRecordsToFile(command);
+                break;
             default:
                 this.showUnknownCommandText(command);
                 break;
@@ -130,6 +135,7 @@ public class InsbecdrConsole {
             + " r        : rewind iterator back to beginning\n"
             + " k        : toggle show/hide transportkontingente\n"
             + " s        : toggle show/hide befahrungsvarianten\n"
+            + " w <file> : write all records to file (e.g. 'w output.txt')\n"
             + " <enter>  : show next " + RECORD_PAGE_SIZE + " records"
         );
     }
@@ -153,6 +159,32 @@ public class InsbecdrConsole {
 
         if (!kontingentIterator.hasNext()) {
             System.out.println("(no more records, press 'r' to rewind)");
+        }
+    }
+
+
+    private void writeRecordsToFile(InsbecdrConsoleCommand command) {
+        if (command.getArgument() == null || command.getArgument().isEmpty()) {
+            System.out.println("missing or invalid filename");
+            return;
+        }
+
+        try {
+            System.out.println("writing to file '" + command.getArgument() + "'...");
+            FileWriter fileWriter = new FileWriter(command.getArgument());
+            int count = 0;
+            while (kontingentIterator.hasNext()) {
+                KontingentRecord record = kontingentIterator.next();
+                if (this.passesFilter(record)) {
+                    String recordText = KontingentRecordPrinter.print(record, this.showTransportkontingente, this.showBefahrungsvarianten);
+                    fileWriter.write(recordText + "\n");
+                    count++;
+                }
+            }
+            fileWriter.close();
+            System.out.println("successfully written " + count + " records.");
+        } catch (IOException exception) {
+            System.out.println("error writing to file: " + exception.getMessage());
         }
     }
 
