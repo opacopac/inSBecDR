@@ -17,7 +17,7 @@
 
 	<properties>
 		<java.version>11</java.version>
-		<pflege.kontingent.sb.api.version>0.0.5</pflege.kontingent.sb.api.version>
+		<pflege.kontingent.sb.api.version>0.0.6-SNAPSHOT</pflege.kontingent.sb.api.version>
 		<zps.serialization.kryo.version>0.0.3</zps.serialization.kryo.version>
 		<start-class>com.tschanz.nova.insbecdr.InsbecdrApplication</start-class>
 	</properties>

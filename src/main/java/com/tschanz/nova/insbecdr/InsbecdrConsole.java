@@ -15,6 +15,7 @@ public class InsbecdrConsole {
     private final KontingentRecordFilter filter = new KontingentRecordFilter();
     private boolean hasPressedQuit = false;
     private boolean showBefahrungsvarianten = false;
+    private boolean showTransportkontingente = true;
 
 
     public InsbecdrConsole(TransportKontingentDatenrelease dr) {
@@ -78,6 +79,9 @@ public class InsbecdrConsole {
             case "s":
                 this.showBefahrungsvarianten = !this.showBefahrungsvarianten;
                 break;
+            case "k":
+                this.showTransportkontingente = !this.showTransportkontingente;
+                break;
             default:
                 this.showUnknownCommandText(command);
                 break;
@@ -124,6 +128,7 @@ public class InsbecdrConsole {
             + " b <uic>  : set uic2 filter (e.g. 'b 8500218')\n"
             + " c        : clear all filters\n"
             + " r        : rewind iterator back to beginning\n"
+            + " k        : toggle show/hide transportkontingente\n"
             + " s        : toggle show/hide befahrungsvarianten\n"
             + " <enter>  : show next " + RECORD_PAGE_SIZE + " records"
         );
@@ -140,7 +145,7 @@ public class InsbecdrConsole {
         while (count < RECORD_PAGE_SIZE && kontingentIterator.hasNext()) {
             KontingentRecord record = kontingentIterator.next();
             if (this.passesFilter(record)) {
-                String recordText = KontingentRecordPrinter.print(record, this.showBefahrungsvarianten);
+                String recordText = KontingentRecordPrinter.print(record, this.showTransportkontingente, this.showBefahrungsvarianten);
                 System.out.println(recordText);
                 count++;
             }
@@ -153,7 +158,7 @@ public class InsbecdrConsole {
 
 
     private boolean passesFilter(KontingentRecord record) {
-        if (this.filter.getDatum() != null && record.getFahrt().getDatum() != this.filter.getDatum()) {
+        if (this.filter.getDatum() != null && !record.getFahrt().getDatum().equals(this.filter.getDatum())) {
             return false;
         }
 

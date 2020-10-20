@@ -27,12 +27,14 @@ public class KontingentIterator implements Iterator<KontingentRecord> {
     }
 
 
+    @Override
     public boolean hasNext() {
         return this.fahrtIterator.hasNext() || this.fahrtAbschnittIterator.hasNext()
             || this.transportKontingentIterator.hasNext();
     }
 
 
+    @Override
     public KontingentRecord next() {
         this.nextTransportKontingent();
 
@@ -50,7 +52,7 @@ public class KontingentIterator implements Iterator<KontingentRecord> {
             this.nextFahrtAbschnitt();
         }
 
-        if (this.transportKontingentIterator != null) {
+        if (this.transportKontingentIterator != null && this.transportKontingentIterator.hasNext()) {
             this.currentTransportKontingent = this.transportKontingentIterator.next();
             this.kontingentAngebotIterator = (this.currentTransportKontingent.getAngebote() != null)
                 ? this.currentTransportKontingent.getAngebote().iterator() : null;
@@ -63,7 +65,7 @@ public class KontingentIterator implements Iterator<KontingentRecord> {
             this.nextFahrt();
         }
 
-        if (this.fahrtAbschnittIterator != null) {
+        if (this.fahrtAbschnittIterator != null && this.fahrtAbschnittIterator.hasNext()) {
             this.currentFahrtAbschnitt = this.fahrtAbschnittIterator.next();
             this.transportKontingentIterator = (this.currentFahrtAbschnitt.getKontingente() != null)
                 ? this.currentFahrtAbschnitt.getKontingente().iterator() : null;

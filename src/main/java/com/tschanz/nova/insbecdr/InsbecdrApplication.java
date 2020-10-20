@@ -2,6 +2,8 @@ package com.tschanz.nova.insbecdr;
 
 import ch.voev.nova.pflege.kontingent.sb.api.Fahrt;
 import ch.voev.nova.pflege.kontingent.sb.api.TransportKontingentDatenrelease;
+import ch.voev.nova.pflege.kontingent.sb.api.befahrungsVariante.BefahrungsVariante;
+import ch.voev.nova.pflege.kontingent.sb.api.rabatte.Rabattstufe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
@@ -9,7 +11,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 import static java.lang.System.exit;
 
@@ -41,7 +46,7 @@ public class InsbecdrApplication implements CommandLineRunner {
             this.showByeByeText();
             exit(1);
         }
-        this.showAnzahlFahrten(dr.getFahrten());
+        this.showDrSummary(dr);
 
         InsbecdrConsole console = new InsbecdrConsole(dr);
         console.run();
@@ -63,8 +68,29 @@ public class InsbecdrApplication implements CommandLineRunner {
     }
 
 
-    private void showAnzahlFahrten(Collection<Fahrt> fahrten) {
-        System.out.println("Anz Fahrten: " + (fahrten != null ? fahrten.size() : 0));
+    private void showDrSummary(TransportKontingentDatenrelease dr) {
+        Collection<Fahrt> fahrten = dr.getFahrten() != null ? dr.getFahrten() : Collections.emptyList();
+        System.out.println("Anz Fahrten: " + fahrten.size());
+
+        Collection<String> verwaltungen = fahrten
+            .stream()
+            .map(Fahrt::getVerwaltungCode)
+            .collect(Collectors.toSet())
+            .stream().sorted().collect(Collectors.toList());
+        System.out.println("Anz Verwaltungen: " + verwaltungen.size() + ": " + verwaltungen.toString());
+
+        Collection<LocalDate> dates = fahrten
+                .stream()
+                .map(Fahrt::getDatum)
+                .collect(Collectors.toSet())
+                .stream().sorted().collect(Collectors.toList());
+        System.out.println("Anz Tage: " + dates.size() + ": " + dates.toString());
+
+        Collection<Rabattstufe> rabattstufen = dr.getRabattstufen() != null ? dr.getRabattstufen() : Collections.emptyList();
+        System.out.println("Anz Rabattstufen: " + rabattstufen.size());
+
+        Collection<BefahrungsVariante> befahrungsVarianten = dr.getBefahrungsVarianten() != null ? dr.getBefahrungsVarianten() : Collections.emptyList();
+        System.out.println("Anz Befahrungsvarianten: " + befahrungsVarianten.size());
     }
 
 

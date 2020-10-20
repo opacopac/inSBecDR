@@ -15,12 +15,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class KontingentRecordPrinter {
-    public static String print(KontingentRecord record, boolean showBefahrungsvarianten) {
+public final class KontingentRecordPrinter {
+    private KontingentRecordPrinter() {
+    }
+
+
+    public static String print(KontingentRecord record, boolean showTransportkontingente, boolean showBefahrungsvarianten) {
         return printRecordCount(record.getCount()) + " "
             + printFahrt(record.getFahrt()) + " "
             + printFahrtAbschnitt(record.getFahrtAbschnitt()) + " "
-            + printTransportKontingent(record.getTransportKontingent(), showBefahrungsvarianten);
+            + printTransportKontingent(record.getTransportKontingent(), showTransportkontingente, showBefahrungsvarianten);
     }
 
 
@@ -42,12 +46,17 @@ public class KontingentRecordPrinter {
     }
 
 
-    private static String printTransportKontingent(TransportKontingent kontingent, boolean showBefahrungsvarianten) {
+    private static String printTransportKontingent(TransportKontingent kontingent, boolean showTransportkontingente, boolean showBefahrungsvarianten) {
+        if (kontingent == null) {
+            return "[NO KONTINGENTE]";
+        }
+
         return "Produkte=" + kontingent.getProduktNummern() + " "
-            + "Ebene=" + kontingent.getEbene() + " "
-            + "Befahrungsvarianten=" + (kontingent.getBefahrungsvariante() == null ? 0 : kontingent.getBefahrungsvariante().size()) + "\n"
-            + (showBefahrungsvarianten ? printBefahrungsvarianteList(kontingent.getBefahrungsvariante()) : "")
-            + printKontingentAngebotList(kontingent.getAngebote());
+            + "Ebene=" + kontingent.getEbene()
+            + " Befahrungsvarianten=" + (kontingent.getBefahrungsvariante() == null ? 0 : kontingent.getBefahrungsvariante().size())
+            + " Kontingente=" + (kontingent.getAngebote() == null ? 0 : kontingent.getAngebote().size())
+            + (showBefahrungsvarianten ? "\n" + printBefahrungsvarianteList(kontingent.getBefahrungsvariante()) : "")
+            + (showTransportkontingente ? "\n" + printKontingentAngebotList(kontingent.getAngebote()) : "");
     }
 
 
@@ -74,7 +83,7 @@ public class KontingentRecordPrinter {
             return "[RABATTSTUFE MISSING]";
         }
 
-        return "StufeId=" + rabattstufe.getIndex() + ": "
+        return "Code=" + rabattstufe.getCode() + ": "
             + printRabattList(rabattstufe.getRabatte());
     }
 

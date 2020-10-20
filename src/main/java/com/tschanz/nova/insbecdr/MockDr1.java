@@ -15,7 +15,10 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class MockDr1 {
+public final class MockDr1 {
+    private MockDr1() {
+    }
+
     public static TransportKontingentDatenrelease createDr() {
         return new TransportKontingentDatenrelease(
             createMetaData(),
@@ -126,7 +129,7 @@ public class MockDr1 {
     public static Rabattstufe createRabattStufe1() {
         return new Rabattstufe(
             "9",
-            1,
+            "1_6C7rdRBvCn",
             List.of(createRabatt1(), createRabatt2())
         );
     }
@@ -135,7 +138,7 @@ public class MockDr1 {
     public static Rabattstufe createRabattStufe2() {
         return new Rabattstufe(
             "10",
-            2,
+            "2_6C7rdRBvCn",
             List.of(createRabatt1(), createRabatt2())
         );
     }
