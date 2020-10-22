@@ -130,6 +130,7 @@ public final class MockDr1 {
         return new Rabattstufe(
             "9",
             "1_6C7rdRBvCn",
+            1,
             List.of(createRabatt1(), createRabatt2())
         );
     }
@@ -139,6 +140,7 @@ public final class MockDr1 {
         return new Rabattstufe(
             "10",
             "2_6C7rdRBvCn",
+            2,
             List.of(createRabatt1(), createRabatt2())
         );
     }

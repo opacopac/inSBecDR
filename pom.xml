@@ -10,14 +10,14 @@
 	</parent>
 	<groupId>com.tschanz.nova</groupId>
 	<artifactId>insbecdr</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.7</version>
 	<name>inSBecDR</name>
 	<description>SB DR Inspector</description>
 	<packaging>jar</packaging>
 
 	<properties>
 		<java.version>11</java.version>
-		<pflege.kontingent.sb.api.version>0.0.6-SNAPSHOT</pflege.kontingent.sb.api.version>
+		<pflege.kontingent.sb.api.version>0.0.7-SNAPSHOT</pflege.kontingent.sb.api.version>
 		<zps.serialization.kryo.version>0.0.3</zps.serialization.kryo.version>
 		<start-class>com.tschanz.nova.insbecdr.InsbecdrApplication</start-class>
 	</properties>

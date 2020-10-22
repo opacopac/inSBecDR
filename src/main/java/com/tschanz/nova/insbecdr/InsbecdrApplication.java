@@ -80,9 +80,11 @@ public class InsbecdrApplication implements CommandLineRunner {
 
 
     private void showWelcomeText() {
+        System.out.println("\n\n");
+        System.out.println("Welcome to inSBecDR " + this.properties.get("insbecdr.version"));
+        System.out.println("=========================");
+        System.out.println("Compatible interface version: " + this.properties.get("sb_dr_interface.version"));
         System.out.println("\n");
-        System.out.println("Welcome to inSBecDR " + this.properties.get("insbecdr.version") +  "!");
-        System.out.println("==========================");
     }
 
 
@@ -130,7 +132,7 @@ public class InsbecdrApplication implements CommandLineRunner {
             try {
                 System.out.println("Reading DR " + argument + "...");
                 TransportKontingentDatenrelease dr = this.sbDrLoader.load(argument);
-                System.out.println("Done.");
+                System.out.println("Done.\n");
                 return dr;
             } catch (IOException exception) {
                 System.out.println("Error: opening DR file '" + argument + "': " + exception.getMessage());

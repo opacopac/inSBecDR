@@ -83,7 +83,8 @@ public final class KontingentRecordPrinter {
             return "[RABATTSTUFE MISSING]";
         }
 
-        return "Code=" + rabattstufe.getCode() + ": "
+        return "Stufe=" + rabattstufe.getStufe() + " "
+            + "Code=" + rabattstufe.getCode() + ": "
             + printRabattList(rabattstufe.getRabatte());
     }
 
