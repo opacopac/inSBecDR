@@ -82,6 +82,52 @@ public class KontingentRecordFilter {
     }
 
 
+
+
+    public boolean recordPassesFilter(KontingentRecord record) {
+        if (record == null) {
+            throw new IllegalArgumentException("record must not be null");
+        }
+
+        // filter by date
+        if (this.getDatum() != null) {
+            if (record.getFahrt() == null || record.getFahrt().getDatum() == null || !record.getFahrt().getDatum().equals(this.getDatum())) {
+                return false;
+            }
+        }
+
+        // filter by verwaltung
+        if (this.getVerwaltung() != null) {
+            if (record.getFahrt() == null || record.getFahrt().getVerwaltungCode() == null || !record.getFahrt().getVerwaltungCode().equals(this.getVerwaltung())) {
+                return false;
+            }
+        }
+
+        // filter by fahrtnummer
+        if (this.getFahrt() > 0) {
+            if (record.getFahrt() == null || record.getFahrt().getFahrtNummer() == null || record.getFahrt().getFahrtNummer() != this.getFahrt()) {
+                return false;
+            }
+        }
+
+        // filter by uic1
+        if (this.getUic1() > 0) {
+            if (record.getFahrtAbschnitt() == null || record.getFahrtAbschnitt().getHst1Uic() == null || record.getFahrtAbschnitt().getHst1Uic() != this.getUic1()) {
+                return false;
+            }
+        }
+
+        // filter by uic2
+        if (this.getUic2() > 0) {
+            if (record.getFahrtAbschnitt() == null || record.getFahrtAbschnitt().getHst2Uic() == null || record.getFahrtAbschnitt().getHst2Uic() != this.getUic2()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
     private void showInvalidArgumentText(InsbecdrConsoleCommand command) {
         this.conWriter.println("Missing or invalid argument for command '" + command.getCommand() + "'. Press 'h' for help.");
     }

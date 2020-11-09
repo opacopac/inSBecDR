@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class InsbecdrConsole {
-    private final static int RECORD_PAGE_SIZE = 10;
+    private final static int MaxRecordsPerPage = 10;
     private TransportKontingentDatenrelease dr;
     private KontingentIterator kontingentIterator;
     private boolean hasPressedQuit = false;
@@ -140,7 +140,7 @@ public class InsbecdrConsole {
             + " k        : toggle show/hide transportkontingente\n"
             + " s        : toggle show/hide befahrungsvarianten\n"
             + " w <file> : write all records to file (e.g. 'w output.txt')\n"
-            + " <enter>  : show next " + RECORD_PAGE_SIZE + " records"
+            + " <enter>  : show next " + MaxRecordsPerPage + " records"
         );
     }
 
@@ -152,9 +152,9 @@ public class InsbecdrConsole {
 
     private void showNextRecords() {
         int count = 0;
-        while (count < RECORD_PAGE_SIZE && kontingentIterator.hasNext()) {
+        while (count < MaxRecordsPerPage && kontingentIterator.hasNext()) {
             KontingentRecord record = kontingentIterator.next();
-            if (this.passesFilter(record)) {
+            if (this.filter.recordPassesFilter(record)) {
                 String recordText = KontingentRecordPrinter.print(record, this.showTransportkontingente, this.showBefahrungsvarianten);
                 this.conWriter.println(recordText);
                 count++;
@@ -180,7 +180,7 @@ public class InsbecdrConsole {
             int count = 0;
             while (kontingentIterator.hasNext()) {
                 KontingentRecord record = kontingentIterator.next();
-                if (this.passesFilter(record)) {
+                if (this.filter.recordPassesFilter(record)) {
                     String recordText = KontingentRecordPrinter.print(record, this.showTransportkontingente, this.showBefahrungsvarianten);
                     fileWriter.write(recordText + "\n");
                     count++;
@@ -199,30 +199,5 @@ public class InsbecdrConsole {
                 this.conWriter.println("error writing to file: " + exception.getMessage());
             }
         }
-    }
-
-
-    private boolean passesFilter(KontingentRecord record) {
-        if (this.filter.getDatum() != null && !record.getFahrt().getDatum().equals(this.filter.getDatum())) {
-            return false;
-        }
-
-        if (this.filter.getVerwaltung() != null && !record.getFahrt().getVerwaltungCode().equals(this.filter.getVerwaltung())) {
-            return false;
-        }
-
-        if (this.filter.getFahrt() > 0 && record.getFahrt().getFahrtNummer() != this.filter.getFahrt()) {
-            return false;
-        }
-
-        if (this.filter.getUic1() > 0 && record.getFahrtAbschnitt().getHst1Uic() != this.filter.getUic1()) {
-            return false;
-        }
-
-        if (this.filter.getUic2() > 0 && record.getFahrtAbschnitt().getHst2Uic() != this.filter.getUic2()) {
-            return false;
-        }
-
-        return true;
     }
 }
