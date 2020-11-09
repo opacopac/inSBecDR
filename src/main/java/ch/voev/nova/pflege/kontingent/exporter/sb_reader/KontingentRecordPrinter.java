@@ -61,7 +61,7 @@ public final class KontingentRecordPrinter {
 
 
     private static String printKontingentAngebotList(List<KontingentAngebot> angebotList) {
-        if (angebotList == null || angebotList.size() == 0) {
+        if (angebotList == null || angebotList.isEmpty()) {
             return "[NO ANGEBOTE]";
         }
 
@@ -90,7 +90,7 @@ public final class KontingentRecordPrinter {
 
 
     private static String printRabattList(Collection<Rabatt> rabattList) {
-        if (rabattList == null || rabattList.size() == 0) {
+        if (rabattList == null || rabattList.isEmpty()) {
             return "[NO RABATTE]";
         }
 
@@ -111,7 +111,7 @@ public final class KontingentRecordPrinter {
 
 
     private static String printBefahrungsvarianteList(Collection<BefahrungsVariante> befahrungsVarianteList) {
-        if (befahrungsVarianteList == null || befahrungsVarianteList.size() == 0) {
+        if (befahrungsVarianteList == null || befahrungsVarianteList.isEmpty()) {
             return "";
         }
 
@@ -129,7 +129,7 @@ public final class KontingentRecordPrinter {
 
 
     private static String printTransportAbschnittList(List<TransportAbschnitt> transportAbschnittList) {
-        if (transportAbschnittList == null || transportAbschnittList.size() == 0) {
+        if (transportAbschnittList == null || transportAbschnittList.isEmpty()) {
             return "[NO TRANSPORTABSCHNITTE]";
         }
 

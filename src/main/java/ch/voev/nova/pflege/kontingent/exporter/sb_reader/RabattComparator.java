@@ -17,7 +17,7 @@ public class RabattComparator implements Comparator<Rabatt> {
 
 
     private String getKlasseString(Rabatt rabatt) {
-        if (rabatt == null || rabatt.getKlasse() == null || rabatt.getKlasse().size() == 0) {
+        if (rabatt == null || rabatt.getKlasse() == null || rabatt.getKlasse().isEmpty()) {
             return "";
         }
 
@@ -30,7 +30,7 @@ public class RabattComparator implements Comparator<Rabatt> {
 
 
     private String getKundensegmentString(Rabatt rabatt) {
-        if (rabatt == null || rabatt.getKundensegmentCode() == null || rabatt.getKundensegmentCode().size() == 0) {
+        if (rabatt == null || rabatt.getKundensegmentCode() == null || rabatt.getKundensegmentCode().isEmpty()) {
             return "";
         }
 

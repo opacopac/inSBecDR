@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class InsbecdrConsole {
-    private final int RECORD_PAGE_SIZE = 10;
+    private final static int RECORD_PAGE_SIZE = 10;
     private TransportKontingentDatenrelease dr;
     private KontingentIterator kontingentIterator;
-    private final KontingentRecordFilter filter = new KontingentRecordFilter();
     private boolean hasPressedQuit = false;
     private boolean showBefahrungsvarianten = false;
     private boolean showTransportkontingente = true;
+    @Autowired private KontingentRecordFilter filter;
     @Autowired private ConsoleWriter conWriter;
 
 

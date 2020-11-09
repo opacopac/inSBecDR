@@ -1,11 +1,13 @@
 package ch.voev.nova.pflege.kontingent.exporter.sb_reader;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 
+@Service
 public class KontingentRecordFilter {
     @Autowired private ConsoleWriter conWriter;
     private LocalDate datum = null;
@@ -22,15 +24,15 @@ public class KontingentRecordFilter {
     public int getUic2() { return uic2; }
 
 
-    public KontingentRecordFilter() {
-    }
-
-
     public void setDatum(InsbecdrConsoleCommand command) {
-        try {
-            this.datum = LocalDate.parse(command.getArgument());
-        } catch (DateTimeParseException | NullPointerException exception) {
+        if (command.getArgument() == null || command.getArgument().isEmpty()) {
             this.showInvalidArgumentText(command);
+        } else {
+            try {
+                this.datum = LocalDate.parse(command.getArgument());
+            } catch (DateTimeParseException exception) {
+                this.showInvalidArgumentText(command);
+            }
         }
     }
 
@@ -38,9 +40,9 @@ public class KontingentRecordFilter {
     public void setVerwaltung(InsbecdrConsoleCommand command) {
         if (command.getArgument() == null || command.getArgument().isEmpty()) {
             this.showInvalidArgumentText(command);
+        } else {
+            this.verwaltung = command.getArgument();
         }
-
-        this.verwaltung = command.getArgument();
     }
 
 
