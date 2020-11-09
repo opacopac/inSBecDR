@@ -1,5 +1,4 @@
-package com.tschanz.nova.insbecdr;
-
+package ch.voev.nova.pflege.kontingent.exporter.sb_reader;
 
 import ch.voev.nova.pflege.kontingent.sb.api.*;
 
@@ -11,7 +10,6 @@ public class KontingentIterator implements Iterator<KontingentRecord> {
     private final Iterator<Fahrt> fahrtIterator;
     private Iterator<FahrtAbschnitt> fahrtAbschnittIterator;
     private Iterator<TransportKontingent> transportKontingentIterator;
-    private Iterator<KontingentAngebot> kontingentAngebotIterator;
     private Fahrt currentFahrt;
     private FahrtAbschnitt currentFahrtAbschnitt;
     private TransportKontingent currentTransportKontingent;
@@ -36,6 +34,10 @@ public class KontingentIterator implements Iterator<KontingentRecord> {
 
     @Override
     public KontingentRecord next() {
+        if (!this.hasNext()) {
+            throw new NoSuchElementException();
+        }
+
         this.nextTransportKontingent();
 
         return new KontingentRecord(
@@ -54,8 +56,6 @@ public class KontingentIterator implements Iterator<KontingentRecord> {
 
         if (this.transportKontingentIterator != null && this.transportKontingentIterator.hasNext()) {
             this.currentTransportKontingent = this.transportKontingentIterator.next();
-            this.kontingentAngebotIterator = (this.currentTransportKontingent.getAngebote() != null)
-                ? this.currentTransportKontingent.getAngebote().iterator() : null;
         }
     }
 

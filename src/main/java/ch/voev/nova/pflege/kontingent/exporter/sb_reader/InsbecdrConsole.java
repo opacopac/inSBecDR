@@ -1,4 +1,4 @@
-package com.tschanz.nova.insbecdr;
+package ch.voev.nova.pflege.kontingent.exporter.sb_reader;
 
 import ch.voev.nova.pflege.kontingent.sb.api.TransportKontingentDatenrelease;
 
@@ -169,9 +169,10 @@ public class InsbecdrConsole {
             return;
         }
 
+        FileWriter fileWriter = null;
         try {
             System.out.println("writing to file '" + command.getArgument() + "'...");
-            FileWriter fileWriter = new FileWriter(command.getArgument());
+            fileWriter = new FileWriter(command.getArgument());
             int count = 0;
             while (kontingentIterator.hasNext()) {
                 KontingentRecord record = kontingentIterator.next();
@@ -185,6 +186,14 @@ public class InsbecdrConsole {
             System.out.println("successfully written " + count + " records.");
         } catch (IOException exception) {
             System.out.println("error writing to file: " + exception.getMessage());
+        } finally {
+            try {
+                if (fileWriter != null) {
+                    fileWriter.close();
+                }
+            } catch (IOException exception) {
+                System.out.println("error writing to file: " + exception.getMessage());
+            }
         }
     }
 

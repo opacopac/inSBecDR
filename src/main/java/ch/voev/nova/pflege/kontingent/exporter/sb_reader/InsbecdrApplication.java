@@ -1,4 +1,4 @@
-package com.tschanz.nova.insbecdr;
+package ch.voev.nova.pflege.kontingent.exporter.sb_reader;
 
 import ch.voev.nova.pflege.kontingent.sb.api.Fahrt;
 import ch.voev.nova.pflege.kontingent.sb.api.TransportKontingentDatenrelease;
@@ -127,7 +127,7 @@ public class InsbecdrApplication implements CommandLineRunner {
     private TransportKontingentDatenrelease loadDr(String argument) {
         if (argument.toLowerCase().equals("-mock")) {
             System.out.println("Reading Mock DR...");
-            return MockDr1.createDr();
+            return MockDr.createDr();
         } else {
             try {
                 System.out.println("Reading DR " + argument + "...");

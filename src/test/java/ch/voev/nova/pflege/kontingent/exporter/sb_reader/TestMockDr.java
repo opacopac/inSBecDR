@@ -1,4 +1,4 @@
-package com.tschanz.nova.insbecdr;
+package ch.voev.nova.pflege.kontingent.exporter.sb_reader;
 
 import ch.voev.nova.pflege.kontingent.sb.api.*;
 import ch.voev.nova.pflege.kontingent.sb.api.befahrungsVariante.BefahrungsVariante;
@@ -15,8 +15,18 @@ import java.util.Collections;
 import java.util.List;
 
 
-public final class MockDr1 {
-    private MockDr1() {
+// TestMockDr has:
+// 1 MetaData
+// 2 Fahrt
+//   2 FahrtAbschnitt (for each Fahrt => 4 total)
+//     2 TransportKontingent (for each Fahrtabschnitt => 8 total)
+//       2 BefahrungsVariante (for each TransportKontingent, lookup list => 2 total)
+//         2 TransportAbschnitt (for each BefahrungsVariante => 4 total)
+//       2 KontingentAngebot (for each TransportKontingent => 16 total)
+//         1 Rabattstufe (for each KontingentAngebot, lookup list => 2 total)
+//           2 Rabatt (for each Rabattstufe => 4 total)
+public final class TestMockDr {
+    private TestMockDr() {
     }
 
     public static TransportKontingentDatenrelease createDr() {

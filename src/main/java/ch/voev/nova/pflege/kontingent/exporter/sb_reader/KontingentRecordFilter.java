@@ -1,4 +1,4 @@
-package com.tschanz.nova.insbecdr;
+package ch.voev.nova.pflege.kontingent.exporter.sb_reader;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
