@@ -1,10 +1,13 @@
 package ch.voev.nova.pflege.kontingent.exporter.sb_reader;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 
 public class KontingentRecordFilter {
+    @Autowired private ConsoleWriter conWriter;
     private LocalDate datum = null;
     private String verwaltung = null;
     private int fahrt = -1;
@@ -78,6 +81,6 @@ public class KontingentRecordFilter {
 
 
     private void showInvalidArgumentText(InsbecdrConsoleCommand command) {
-        System.out.println("Missing or invalid argument for command '" + command.getCommand() + "'. Press 'h' for help.");
+        this.conWriter.println("Missing or invalid argument for command '" + command.getCommand() + "'. Press 'h' for help.");
     }
 }

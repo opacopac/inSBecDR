@@ -25,9 +25,10 @@ import static java.lang.System.exit;
 
 @SpringBootApplication
 public class InsbecdrApplication implements CommandLineRunner {
-    @Autowired
-    private SbDrLoader sbDrLoader;
     private Properties properties;
+    @Autowired private ConsoleWriter conWriter;
+    @Autowired private SbDrLoader sbDrLoader;
+    @Autowired private InsbecdrConsole console;
 
 
     public static void main(String[] args) {
@@ -55,8 +56,8 @@ public class InsbecdrApplication implements CommandLineRunner {
         }
         this.showDrSummary(dr);
 
-        InsbecdrConsole console = new InsbecdrConsole(dr);
-        console.run();
+        this.console.setDr(dr);
+        this.console.run();
 
         this.showByeByeText();
         exit(0);
@@ -80,66 +81,66 @@ public class InsbecdrApplication implements CommandLineRunner {
 
 
     private void showWelcomeText() {
-        System.out.println("\n\n");
-        System.out.println("Welcome to inSBecDR " + this.properties.get("insbecdr.version"));
-        System.out.println("=========================");
-        System.out.println("Compatible interface version: " + this.properties.get("sb_dr_interface.version"));
-        System.out.println("\n");
+        this.conWriter.println("\n\n");
+        this.conWriter.println("Welcome to inSBecDR " + this.properties.get("insbecdr.version"));
+        this.conWriter.println("=========================");
+        this.conWriter.println("Compatible interface version: " + this.properties.get("sb_dr_interface.version"));
+        this.conWriter.println("\n");
     }
 
 
     private void showInvalidArgumentsText() {
-        System.out.println("Missing argument: please specify <file name> or <url> of a Sparbillett DR or '-mock' to use mock data!");
+        this.conWriter.println("Missing argument: please specify <file name> or <url> of a Sparbillett DR or '-mock' to use mock data!");
     }
 
 
     private void showDrSummary(TransportKontingentDatenrelease dr) {
         Collection<Fahrt> fahrten = dr.getFahrten() != null ? dr.getFahrten() : Collections.emptyList();
-        System.out.println("Anz Fahrten: " + fahrten.size());
+        this.conWriter.println("Anz Fahrten: " + fahrten.size());
 
         Collection<String> verwaltungen = fahrten
             .stream()
             .map(Fahrt::getVerwaltungCode)
             .collect(Collectors.toSet())
             .stream().sorted().collect(Collectors.toList());
-        System.out.println("Anz Verwaltungen: " + verwaltungen.size() + ": " + verwaltungen.toString());
+        this.conWriter.println("Anz Verwaltungen: " + verwaltungen.size() + ": " + verwaltungen.toString());
 
         Collection<LocalDate> dates = fahrten
                 .stream()
                 .map(Fahrt::getDatum)
                 .collect(Collectors.toSet())
                 .stream().sorted().collect(Collectors.toList());
-        System.out.println("Anz Tage: " + dates.size() + ": " + dates.toString());
+        this.conWriter.println("Anz Tage: " + dates.size() + ": " + dates.toString());
 
         Collection<Rabattstufe> rabattstufen = dr.getRabattstufen() != null ? dr.getRabattstufen() : Collections.emptyList();
-        System.out.println("Anz Rabattstufen: " + rabattstufen.size());
+        this.conWriter.println("Anz Rabattstufen: " + rabattstufen.size());
 
         Collection<BefahrungsVariante> befahrungsVarianten = dr.getBefahrungsVarianten() != null ? dr.getBefahrungsVarianten() : Collections.emptyList();
-        System.out.println("Anz Befahrungsvarianten: " + befahrungsVarianten.size());
+        this.conWriter.println("Anz Befahrungsvarianten: " + befahrungsVarianten.size());
     }
 
 
     private void showByeByeText() {
-        System.out.println("Exiting.");
+        this.conWriter.println("Exiting.");
     }
 
 
     private TransportKontingentDatenrelease loadDr(String argument) {
         if (argument.toLowerCase().equals("-mock")) {
-            System.out.println("Reading Mock DR...");
+            this.conWriter.println("Reading Mock DR...");
             return MockDr.createDr();
         } else {
             try {
-                System.out.println("Reading DR " + argument + "...");
+                this.conWriter.println("Reading DR " + argument + "...");
                 TransportKontingentDatenrelease dr = this.sbDrLoader.load(argument);
-                System.out.println("Done.\n");
+                this.conWriter.println("Done.\n");
                 return dr;
             } catch (IOException exception) {
-                System.out.println("Error: opening DR file '" + argument + "': " + exception.getMessage());
+                this.conWriter.println("Error: opening DR file '" + argument + "': " + exception.getMessage());
                 return null;
             } catch (KryoException exception2) {
-                System.out.println("Error: deserializing DR file '" + argument + "': " + exception2.getMessage());
-                System.out.println("  (only files with interface version " + this.properties.get("sb_dr_interface.version") +  " supported)");
+                this.conWriter.println("Error: deserializing DR file '" + argument + "': " + exception2.getMessage());
+                this.conWriter.println("  (only files with interface version " + this.properties.get("sb_dr_interface.version") +  " supported)");
                 return null;
             }
         }

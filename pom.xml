@@ -8,7 +8,7 @@
 		<version>2.3.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.tschanz.nova</groupId>
+	<groupId>ch.voev.nova.pflege.kontingent.exporter.sb_reader</groupId>
 	<artifactId>insbecdr</artifactId>
 	<version>1.0.7</version>
 	<name>inSBecDR</name>
@@ -19,7 +19,7 @@
 		<java.version>11</java.version>
 		<pflege.kontingent.sb.api.version>0.0.7-SNAPSHOT</pflege.kontingent.sb.api.version>
 		<zps.serialization.kryo.version>0.0.3</zps.serialization.kryo.version>
-		<start-class>com.tschanz.nova.insbecdr.InsbecdrApplication</start-class>
+		<start-class>ch.voev.nova.pflege.kontingent.exporter.sb_reader.InsbecdrApplication</start-class>
 	</properties>
 
 	<dependencies>

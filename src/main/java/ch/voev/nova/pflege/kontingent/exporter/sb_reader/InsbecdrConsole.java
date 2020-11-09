@@ -1,6 +1,8 @@
 package ch.voev.nova.pflege.kontingent.exporter.sb_reader;
 
 import ch.voev.nova.pflege.kontingent.sb.api.TransportKontingentDatenrelease;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,17 +12,19 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 
+@Component
 public class InsbecdrConsole {
     private final int RECORD_PAGE_SIZE = 10;
-    private final TransportKontingentDatenrelease dr;
+    private TransportKontingentDatenrelease dr;
     private KontingentIterator kontingentIterator;
     private final KontingentRecordFilter filter = new KontingentRecordFilter();
     private boolean hasPressedQuit = false;
     private boolean showBefahrungsvarianten = false;
     private boolean showTransportkontingente = true;
+    @Autowired private ConsoleWriter conWriter;
 
 
-    public InsbecdrConsole(TransportKontingentDatenrelease dr) {
+    public void setDr(TransportKontingentDatenrelease dr) {
         if (dr == null) {
             throw new IllegalArgumentException("Parameter 'dr' must not be empty!");
         }
@@ -95,7 +99,7 @@ public class InsbecdrConsole {
 
 
     private void showWelcomeText() {
-        System.out.println("Press <enter> to show records & 'h' for help.");
+        this.conWriter.println("Press <enter> to show records & 'h' for help.");
     }
 
 
@@ -111,17 +115,17 @@ public class InsbecdrConsole {
             .filter(x -> !x.isEmpty())
             .collect(Collectors.joining(","))
             + "> ";
-        System.out.print(promptText);
+        this.conWriter.print(promptText);
     }
 
 
     private void showUnknownCommandText(InsbecdrConsoleCommand command) {
-        System.out.println("Unknown command '" + command.getCommand() + "'. Press 'h' for help.");
+        this.conWriter.println("Unknown command '" + command.getCommand() + "'. Press 'h' for help.");
     }
 
 
     private void showHelpText() {
-        System.out.println(
+        this.conWriter.println(
             "inSBecDR commands:\n"
             + "-----------------\n"
             + " h        : help\n"
@@ -152,26 +156,26 @@ public class InsbecdrConsole {
             KontingentRecord record = kontingentIterator.next();
             if (this.passesFilter(record)) {
                 String recordText = KontingentRecordPrinter.print(record, this.showTransportkontingente, this.showBefahrungsvarianten);
-                System.out.println(recordText);
+                this.conWriter.println(recordText);
                 count++;
             }
         }
 
         if (!kontingentIterator.hasNext()) {
-            System.out.println("(no more records, press 'r' to rewind)");
+            this.conWriter.println("(no more records, press 'r' to rewind)");
         }
     }
 
 
     private void writeRecordsToFile(InsbecdrConsoleCommand command) {
         if (command.getArgument() == null || command.getArgument().isEmpty()) {
-            System.out.println("missing or invalid filename");
+            this.conWriter.println("missing or invalid filename");
             return;
         }
 
         FileWriter fileWriter = null;
         try {
-            System.out.println("writing to file '" + command.getArgument() + "'...");
+            this.conWriter.println("writing to file '" + command.getArgument() + "'...");
             fileWriter = new FileWriter(command.getArgument());
             int count = 0;
             while (kontingentIterator.hasNext()) {
@@ -183,16 +187,16 @@ public class InsbecdrConsole {
                 }
             }
             fileWriter.close();
-            System.out.println("successfully written " + count + " records.");
+            this.conWriter.println("successfully written " + count + " records.");
         } catch (IOException exception) {
-            System.out.println("error writing to file: " + exception.getMessage());
+            this.conWriter.println("error writing to file: " + exception.getMessage());
         } finally {
             try {
                 if (fileWriter != null) {
                     fileWriter.close();
                 }
             } catch (IOException exception) {
-                System.out.println("error writing to file: " + exception.getMessage());
+                this.conWriter.println("error writing to file: " + exception.getMessage());
             }
         }
     }
