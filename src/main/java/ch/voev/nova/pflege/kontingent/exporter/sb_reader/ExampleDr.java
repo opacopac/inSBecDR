@@ -15,8 +15,8 @@ import java.util.Collections;
 import java.util.List;
 
 
-public final class MockDr {
-    private MockDr() {
+public final class ExampleDr {
+    private ExampleDr() {
     }
 
     public static TransportKontingentDatenrelease createDr() {

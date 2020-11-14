@@ -1,24 +1,20 @@
 package ch.voev.nova.pflege.kontingent.exporter.sb_reader;
 
 import ch.voev.nova.pflege.kontingent.sb.api.TransportKontingentDatenrelease;
-import ch.voev.nova.serialization.SerializationFactory;
 import ch.voev.nova.serialization.Deserializer;
+import ch.voev.nova.serialization.SerializationFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.io.*;
-import java.net.URL;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.zip.InflaterInputStream;
 
 
 @Service
 public class SbDrLoader {
-    @Autowired
-    private final SerializationFactory serializationFactory;
-
-
-    public SbDrLoader(SerializationFactory serializationFactory) {
-        this.serializationFactory = serializationFactory;
-    }
+    @Autowired private SerializationFactory serializationFactory;
+    @Autowired private FileIOFactory fileIOFactory;
 
 
     public TransportKontingentDatenrelease load(String drFileOrUrl) throws IOException {
@@ -32,9 +28,9 @@ public class SbDrLoader {
         InputStream fileStream;
 
         if (filename.toLowerCase().startsWith("http")) {
-            fileStream = new URL(filename).openStream();
+            fileStream = this.fileIOFactory.createUrlInputStream(filename);
         } else {
-            fileStream = new FileInputStream(new File(filename));
+            fileStream = this.fileIOFactory.createFileInputStream(filename);
         }
 
         return new InflaterInputStream(fileStream);

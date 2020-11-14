@@ -4,17 +4,16 @@ import ch.voev.nova.pflege.kontingent.sb.api.TransportKontingentDatenrelease;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 
 @Component
 public class InsbecdrConsole {
-    private final static int MaxRecordsPerPage = 10;
+    private final static int MAX_RECORDS_PER_PAGE = 10;
     private TransportKontingentDatenrelease dr;
     private KontingentIterator kontingentIterator;
     private boolean hasPressedQuit = false;
@@ -22,6 +21,8 @@ public class InsbecdrConsole {
     private boolean showTransportkontingente = true;
     @Autowired private KontingentRecordFilter filter;
     @Autowired private ConsoleWriter conWriter;
+    @Autowired private ConsoleReader conReader;
+    @Autowired private FileIOFactory fileIOFactory;
 
 
     public void setDr(TransportKontingentDatenrelease dr) {
@@ -37,10 +38,9 @@ public class InsbecdrConsole {
     public void run() {
         this.showWelcomeText();
 
-        Scanner scanner = new Scanner(System.in);
         do {
             this.showPrompt();
-            String input = scanner.nextLine();
+            String input = this.conReader.nextLine();
             this.processCommand(input);
         } while(!this.hasPressedQuit);
     }
@@ -140,7 +140,7 @@ public class InsbecdrConsole {
             + " k        : toggle show/hide transportkontingente\n"
             + " s        : toggle show/hide befahrungsvarianten\n"
             + " w <file> : write all records to file (e.g. 'w output.txt')\n"
-            + " <enter>  : show next " + MaxRecordsPerPage + " records"
+            + " <enter>  : show next " + MAX_RECORDS_PER_PAGE + " records"
         );
     }
 
@@ -152,7 +152,7 @@ public class InsbecdrConsole {
 
     private void showNextRecords() {
         int count = 0;
-        while (count < MaxRecordsPerPage && kontingentIterator.hasNext()) {
+        while (count < MAX_RECORDS_PER_PAGE && kontingentIterator.hasNext()) {
             KontingentRecord record = kontingentIterator.next();
             if (this.filter.recordPassesFilter(record)) {
                 String recordText = KontingentRecordPrinter.print(record, this.showTransportkontingente, this.showBefahrungsvarianten);
@@ -173,10 +173,10 @@ public class InsbecdrConsole {
             return;
         }
 
-        FileWriter fileWriter = null;
+        Writer fileWriter = null;
         try {
             this.conWriter.println("writing to file '" + command.getArgument() + "'...");
-            fileWriter = new FileWriter(command.getArgument());
+            fileWriter = this.fileIOFactory.createFileWriter(command.getArgument());
             int count = 0;
             while (kontingentIterator.hasNext()) {
                 KontingentRecord record = kontingentIterator.next();

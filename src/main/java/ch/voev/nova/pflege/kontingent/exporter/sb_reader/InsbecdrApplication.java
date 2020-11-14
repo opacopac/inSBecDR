@@ -82,15 +82,15 @@ public class InsbecdrApplication implements CommandLineRunner {
 
     private void showWelcomeText() {
         this.conWriter.println("\n\n");
-        this.conWriter.println("Welcome to inSBecDR " + this.properties.get("insbecdr.version"));
-        this.conWriter.println("=========================");
+        this.conWriter.println("Welcome to inSBecDR");
+        this.conWriter.println("===================");
         this.conWriter.println("Compatible interface version: " + this.properties.get("sb_dr_interface.version"));
         this.conWriter.println("\n");
     }
 
 
     private void showInvalidArgumentsText() {
-        this.conWriter.println("Missing argument: please specify <file name> or <url> of a Sparbillett DR or '-mock' to use mock data!");
+        this.conWriter.println("Missing argument: please specify <file name> or <url> of a Sparbillett DR or '-example' to use example data!");
     }
 
 
@@ -126,9 +126,9 @@ public class InsbecdrApplication implements CommandLineRunner {
 
 
     private TransportKontingentDatenrelease loadDr(String argument) {
-        if (argument.toLowerCase().equals("-mock")) {
+        if (argument.toLowerCase().equals("-example")) {
             this.conWriter.println("Reading Mock DR...");
-            return MockDr.createDr();
+            return ExampleDr.createDr();
         } else {
             try {
                 this.conWriter.println("Reading DR " + argument + "...");
@@ -136,10 +136,10 @@ public class InsbecdrApplication implements CommandLineRunner {
                 this.conWriter.println("Done.\n");
                 return dr;
             } catch (IOException exception) {
-                this.conWriter.println("Error: opening DR file '" + argument + "': " + exception.getMessage());
+                this.conWriter.println("\nError: opening DR file '" + argument + "': " + exception.getMessage());
                 return null;
             } catch (KryoException exception2) {
-                this.conWriter.println("Error: deserializing DR file '" + argument + "': " + exception2.getMessage());
+                this.conWriter.println("\nError: deserializing DR file '" + argument + "': " + exception2.getMessage());
                 this.conWriter.println("  (only files with interface version " + this.properties.get("sb_dr_interface.version") +  " supported)");
                 return null;
             }
